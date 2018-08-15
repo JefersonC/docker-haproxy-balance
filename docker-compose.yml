@@ -1,0 +1,33 @@
+version: '3'
+
+services:
+  app1:
+      image: ambientum/php:7.2-nginx
+      container_name: app1
+      volumes:
+        - ./app:/var/www/app/public
+
+  app2:
+      image: ambientum/php:7.2-nginx
+      container_name: app2
+      volumes:
+        - ./app:/var/www/app/public
+
+  app3:
+      image: ambientum/php:7.2-nginx
+      container_name: app3
+      volumes:
+        - ./app:/var/www/app/public
+
+  haproxy:
+    image: haproxy:1.7
+    links:
+      - app1
+      - app2
+      - app3
+    volumes:
+      - ./haproxy:/usr/local/etc/haproxy:ro
+    ports:
+      - "8088:80"
+    environment:
+      - TZ=America/Sao_Paulo
